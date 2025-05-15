@@ -19,6 +19,23 @@ conn.connect(err => {
 
 app.use(express.json());
 
+app.get('/health', (req, res) => {
+  // Simple database connectivity check
+  conn.ping((err) => {
+    if (err) {
+      console.error('DB health check failed:', err);
+      return res.status(500).json({ 
+        status: 'DOWN',
+        error: 'Database connection failed'
+      });
+    }
+    res.status(200).json({
+      status: 'UP',
+      db: 'connected'
+    });
+  });
+});
+
 app.post('/like', (req, res) => {
     conn.query('UPDATE likes SET count = count + 1 WHERE id = 1', (err) => {
         if (err) return res.status(500).send(err);
@@ -32,13 +49,7 @@ app.get('/likes', (req, res) => {
         res.send({ likes: results[0].count });
     });
 });
-app.get('/health', (req, res) => {
-  // Simple database check
-  conn.ping(err => {
-    if (err) return res.status(500).send('DB connection failed');
-    res.status(200).send('OK');
-  });
-});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
