@@ -32,7 +32,13 @@ app.get('/likes', (req, res) => {
         res.send({ likes: results[0].count });
     });
 });
-
+app.get('/health', (req, res) => {
+  // Simple database check
+  conn.ping(err => {
+    if (err) return res.status(500).send('DB connection failed');
+    res.status(200).send('OK');
+  });
+});
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
