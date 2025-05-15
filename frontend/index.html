@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three-Tier App</title>
+</head>
+<body>
+    <h1>This is a three-tier application</h1>
+    <h2>Hello from Philopater Mansour</h2>
+
+    <button onclick="like()">Like</button>
+    <button onclick="showLikes()">Show Likes</button>
+    <p id="like-count"></p>
+
+    <script>
+        async function like() {
+        await fetch("/like", { method: "POST" });
+        }
+        async function showLikes() {
+        const res = await fetch("/likes");
+        const data = await res.json();
+        document.getElementById("like-count").innerText = `Likes: ${data.likes}`;
+        }
+    </script>
+</body>
+</html>
