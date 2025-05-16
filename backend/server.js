@@ -16,6 +16,23 @@ conn.connect(err => {
     if (err) throw err;
     console.log("Connected to DB");
 });
+const dns = require('dns');
+
+dns.lookup(process.env.DB_HOST, (err, address, family) => {
+  if (err) {
+    console.error('DNS lookup failed:', err);
+  } else {
+    console.log(`DNS lookup success: ${process.env.DB_HOST} -> ${address} (IPv${family})`);
+  }
+});
+
+dns.resolve(process.env.DB_HOST, 'A', (err, addresses) => {
+  if (err) {
+    console.error('DNS resolve failed:', err);
+  } else {
+    console.log(`DNS resolve success: ${process.env.DB_HOST} -> ${addresses}`);
+  }
+});
 
 app.use(express.json());
 
